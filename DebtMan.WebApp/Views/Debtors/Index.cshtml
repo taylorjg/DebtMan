@@ -1,0 +1,71 @@
+﻿@model IEnumerable<DebtMan.WebApp.Models.DebtorModel>
+
+@{
+    ViewBag.Title = "List of debtors";
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Income</th>
+        <th>Expenditure</th>
+        <th>Disposable Income</th>
+        <th>Total Amount Owed</th>
+        <th>McDermott and Godfrey</th>
+        <th>DebtDestructor</th>
+        <th>MoneyHelper</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td class="money-column">
+            @Html.DisplayFor(modelItem => item.Income)
+        </td>
+        <td class="money-column">
+            @Html.DisplayFor(modelItem => item.Expenditure)
+        </td>
+        <td class="money-column">
+            @Html.DisplayFor(modelItem => item.DisposableIncome)
+        </td>
+        <td class="money-column">
+            @Html.DisplayFor(modelItem => item.TotalAmountOwed)
+        </td>
+        <td class="money-column">
+            @Html.ActionLink(
+                linkText: item.MonthlyManagementFeeCompanyA,
+                actionName: "Details",
+                controllerName: "DebtManagementPlan",
+                routeValues: new { id = item.Id, company = DebtMan.DomainModel.Company.CompanyA },
+                htmlAttributes: null)
+        </td>
+        <td class="money-column">
+            @Html.ActionLink(
+                linkText: item.MonthlyManagementFeeCompanyB,
+                actionName: "Details",
+                controllerName: "DebtManagementPlan",
+                routeValues: new { id = item.Id, company = DebtMan.DomainModel.Company.CompanyB },
+                htmlAttributes: null)
+        </td>
+        <td class="money-column">
+            @Html.ActionLink(
+                linkText: item.MonthlyManagementFeeCompanyC,
+                actionName: "Details",
+                controllerName: "DebtManagementPlan",
+                routeValues: new { id = item.Id, company = DebtMan.DomainModel.Company.CompanyC },
+                htmlAttributes: null)
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

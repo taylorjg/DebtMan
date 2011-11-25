@@ -1,0 +1,79 @@
+﻿@model DebtMan.WebApp.Models.DebtManagementPlanModel
+
+@{
+    ViewBag.Title = "Debt management plan details";
+}
+
+<p>
+    @Html.ActionLink("Back to List", "Index", "Debtors")
+</p>
+
+<fieldset>
+    <legend>Debt Management Plan</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DebtorName)
+    </div>
+
+    <div class="display-label">Income</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DebtorIncome)
+    </div>
+
+    <div class="display-label">Expenditure</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DebtorExpenditure)
+    </div>
+
+    <div class="display-label">Disposable Income</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DebtorDisposableIncome)
+    </div>
+
+    <div class="display-label">Total Amount Owed</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DebtorTotalAmountOwed)
+    </div>
+
+    <div class="display-label">Company Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CompanyName)
+    </div>
+
+    <div class="display-label">Monthly Management Fee</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MonthlyManagementFee)
+    </div>
+
+    <div class="display-label">Monthly Repayments To Creditors</div>
+    <div class="display-field">
+        <table>
+            <tr>
+                <th>
+                    Amount Owed
+                </th>
+                <th>
+                    Monthly Repayment
+                </th>
+            </tr>
+
+        @foreach (var item in Model.CreditorDetails) {
+            <tr>
+                <td class="money-column">
+                    @Html.DisplayFor(modelItem => item.CreditorAmountOwed)
+                </td>
+                <td class="money-column">
+                    @Html.DisplayFor(modelItem => item.MonthlyRepayment)
+                </td>
+            </tr>
+        }
+
+        </table>
+    </div>
+
+</fieldset>
+
+<p>
+    @Html.ActionLink("Back to List", "Index", "Debtors")
+</p>

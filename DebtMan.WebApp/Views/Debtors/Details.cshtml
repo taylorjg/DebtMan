@@ -1,0 +1,62 @@
+﻿@model DebtMan.WebApp.Models.DebtorModel
+
+@{
+    ViewBag.Title = "Debtor details";
+}
+
+<fieldset>
+    <legend>Debtor</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Income</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Income)
+    </div>
+
+    <div class="display-label">Expenditure</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Expenditure)
+    </div>
+
+    <div class="display-label">Disposable Income</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DisposableIncome)
+    </div>
+
+    <div class="display-label">Total Amount Owed</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TotalAmountOwed)
+    </div>
+
+    <div class="display-label">Company Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.CompanyName)
+    </div>
+
+    <div class="display-label">Debts</div>
+    <div class="display-field">
+        <table>
+            <tr>
+                <th>Amount Owed</th>
+            </tr>
+
+        @foreach (var item in Model.Creditors) {
+            <tr>
+                <td class="money-column">
+                    @Html.DisplayFor(modelItem => item.AmountOwed)
+                </td>
+            </tr>
+        }
+
+        </table>
+    </div>
+
+</fieldset>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

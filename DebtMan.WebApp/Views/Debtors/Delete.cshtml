@@ -1,0 +1,43 @@
+﻿@model DebtMan.WebApp.Models.DebtorModel
+
+@{
+    ViewBag.Title = "Delete debtor";
+}
+
+<h3>Are you sure you want to delete this debtor?</h3>
+
+@using (Html.BeginForm()) {
+    
+    <fieldset>
+        <legend>Debtor</legend>
+
+        <div class="display-label">Name</div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Name)
+        </div>
+
+        <div class="display-label">Income</div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Income)
+        </div>
+
+        <div class="display-label">Expenditure</div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.Expenditure)
+        </div>
+
+        <div class="display-label">Company Name</div>
+        <div class="display-field">
+            @Html.DisplayFor(model => model.CompanyName)
+        </div>
+
+        <p>
+            <input type="submit" value="Delete" />
+        </p>
+
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
