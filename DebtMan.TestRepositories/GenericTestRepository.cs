@@ -6,100 +6,113 @@ using DebtMan.DomainModel.Repositories;
 
 namespace DebtMan.TestRepositories
 {
-    internal class GenericTestRepository<T, ID> : IGenericRepository<T, ID>
+    internal class GenericTestRepository<TEntity, TId> : IGenericRepository<TEntity, TId> where TEntity : class
     {
-        private IList<T> entities;
+        private readonly Type _entityType = typeof(TEntity);
+        private readonly Type _primaryKeyType = typeof(TId);
+        private readonly IList<TEntity> _entities;
 
-        public GenericTestRepository(IEnumerable<T> items)
+        public GenericTestRepository(IEnumerable<TEntity> items)
         {
-            this.entities = new List<T>(items);
+            _entities = new List<TEntity>(items);
         }
 
-        public T FindById(ID id)
+        public TEntity FindById(TId id)
         {
-            T result = default(T);
-
-            Type entityType = typeof(T);
-            Type primaryKeyType = typeof(ID);
-
-            FieldInfo fieldInfo = entityType.GetField("id", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (fieldInfo != null) {
-
-                foreach (T entity in this.entities) {
-
-                    object fieldValue = fieldInfo.GetValue(entity);
-                    if (fieldValue.GetType() == primaryKeyType) {
-                        if (fieldValue.Equals(id)) {
-                            result = entity;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return result;
+            return _entities.FirstOrDefault(entity => GetPrimaryKey(entity).Equals(id));
         }
 
-        public T FindByIdAndLock(ID id)
+        public TEntity FindByIdAndLock(TId id)
         {
             return FindById(id);
         }
 
-        public T[] FindAll()
+        public TEntity[] FindAll()
         {
-            return this.entities.ToArray();
+            return _entities.OrderBy(GetPrimaryKey).ToArray();
         }
 
-        public T MakePersistent(T entity)
+        public TEntity MakePersistent(TEntity entity)
         {
-            Type entityType = typeof(T);
-            Type primaryKeyType = typeof(ID);
+            var idOfExistingEntity = GetPrimaryKey(entity);
 
-            FieldInfo fieldInfo = entityType.GetField("id", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            if (fieldInfo != null) {
-                object fieldValue = fieldInfo.GetValue(entity);
-                if (fieldValue.GetType() == primaryKeyType) {
-                    if (fieldValue.Equals(default(ID))) {
-                        object id = GeneratePrimaryKey();
-                        fieldInfo.SetValue(entity, id);
-                    }
-                }
+            if (idOfExistingEntity.Equals(default(TId))) {
+                GeneratePrimaryKey(entity);
+                _entities.Add(entity);
             }
+            else {
+                var existingEntity = FindById(idOfExistingEntity);
 
-            // TODO: Uses entity.Equals() ? Which is effectively reference equals unless entity overrides it ?
-            if (!this.entities.Contains(entity))
-                this.entities.Add(entity);
+                if (existingEntity == null)
+                    throw new InvalidOperationException(string.Format("Expected an entity with an id of {0} to exist in the repository.", idOfExistingEntity));
+
+                _entities.Remove(existingEntity);
+                _entities.Add(entity);
+            }
 
             return entity;
         }
 
-        public void MakeTransient(T entity)
+        public void MakeTransient(TEntity entity)
         {
-            // TODO: Uses entity.Equals() ? Which is effectively reference equals unless entity overrides it ?
-            this.entities.Remove(entity);
+            var idOfExistingEntity = GetPrimaryKey(entity);
+
+            if (idOfExistingEntity.Equals(default(TId)))
+            {
+                throw new InvalidOperationException("Attempt to call MakeTransient on an entity with a default id.");
+            }
+
+            var existingEntity = FindById(idOfExistingEntity);
+
+            if (existingEntity == null)
+                throw new InvalidOperationException(string.Format("Expected an entity with an id of {0} to exist in the repository.", idOfExistingEntity));
+
+            _entities.Remove(existingEntity);
         }
 
-        private object GeneratePrimaryKey()
+        private TId GetPrimaryKey(TEntity entity)
         {
-            object id = default(ID);
+            var id = default(TId);
 
-            if (typeof(ID) == typeof(Guid)) {
-                id = Guid.NewGuid();
-            }
-            else {
-                if (typeof(ID) == typeof(int)) {
-                    Random random = new Random();
-                    for (; ; ) {
-                        id = random.Next();
-                        if (FindById((ID)id) == null)
-                            break;
-                    }
+            var fieldInfo = _entityType.GetField("id", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (fieldInfo != null) {
+                var fieldValue = fieldInfo.GetValue(entity);
+                if (fieldValue.GetType() == _primaryKeyType) {
+                    id = (TId)fieldValue;
                 }
             }
 
             return id;
+        }
+
+        private void SetPrimaryKey(TEntity entity, object id)
+        {
+            var fieldInfo = _entityType.GetField("id", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (fieldInfo != null) {
+                fieldInfo.SetValue(entity, id);
+            }
+        }
+
+        private void GeneratePrimaryKey(TEntity entity)
+        {
+            if (_primaryKeyType == typeof(Guid)) {
+                SetPrimaryKey(entity, Guid.NewGuid());
+                return;
+            }
+
+            if (_primaryKeyType == typeof(int)) {
+                var random = new Random();
+                for (; ; ) {
+                    object id = random.Next();
+                    if (FindById((TId) id) != null) continue;
+                    SetPrimaryKey(entity, id);
+                    return;
+                }
+            }
+
+            throw new NotSupportedException(string.Format("Don't know how to generate a new primary key of type {0}.", _primaryKeyType.FullName));
         }
     }
 }

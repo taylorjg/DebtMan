@@ -18,128 +18,117 @@ namespace DebtMan.WebApp.Controllers
             _debtorRepository = debtorRepository;
         }
 
-        //
         // GET: /Debtors/
         public ActionResult Index()
         {
-            Debtor[] debtors = _debtorRepository.FindAll();
-            DebtorModel[] model = Mapper.Map<Debtor[], DebtorModel[]>(debtors);
+            var domainDebtors = _debtorRepository.FindAll();
+            var modelDebtors = Mapper.Map<Debtor[], DebtorViewModel[]>(domainDebtors);
 
-            return View(model);
+            return View(modelDebtors);
         }
 
-        //
         // GET: /Debtors/Details/5
         public ActionResult Details(int id)
         {
-            Debtor debtor = _debtorRepository.FindById(id);
+            var domainDebtor = _debtorRepository.FindById(id);
 
-            if (debtor == null) {
+            if (domainDebtor == null) {
                 throw new InvalidOperationException(string.Format("Temporary exception - no debtor found with id \"{0}\".", id));
             }
 
-            DebtorModel model = Mapper.Map<Debtor, DebtorModel>(debtor);
+            var modelDebtor = Mapper.Map<Debtor, DebtorViewModel>(domainDebtor);
 
-            return View(model);
+            return View(modelDebtor);
         }
 
-        //
         // GET: /Debtors/Create
         public ActionResult Create()
         {
-            Debtor model = new Debtor();
-
-            model.Creditors = new Creditor[]
-            {
-                new Creditor() {}
-            };
-
-            return View(model);
+            var editModelDebtor = new DebtorEditModel { Debts = new DebtEditModel[4]};
+            ViewBag.Title = "Create a new debtor";
+            return View("CreateOrEdit", editModelDebtor);
         }
 
-        //
         // POST: /Debtors/Create
         [HttpPost]
-        public ActionResult Create(Debtor debtor)
+        public ActionResult Create(DebtorEditModel editModelDebtor)
         {
-            try {
-                _debtorRepository.MakePersistent(debtor);
+            if (ModelState.IsValid)
+            {
+                var domainDebtor = new Debtor(editModelDebtor.Id);
+                Mapper.Map(editModelDebtor, domainDebtor);
+                _debtorRepository.MakePersistent(domainDebtor);
                 return RedirectToAction("Index");
             }
-            catch {
-                return View();
-            }
+
+            return View("CreateOrEdit", editModelDebtor);
         }
 
-        //
         // GET: /Debtors/Edit/5
         public ActionResult Edit(int id)
         {
-            Debtor debtor = _debtorRepository.FindById(id);
+            var domainDebtor = _debtorRepository.FindById(id);
 
-            if (debtor == null) {
+            if (domainDebtor == null) {
                 throw new InvalidOperationException(string.Format("Temporary exception - no debtor found with id \"{0}\".", id));
             }
 
-            DebtorModel model = Mapper.Map<Debtor, DebtorModel>(debtor);
-
-            return View(model);
+            var editModelDebtor = Mapper.Map<Debtor, DebtorEditModel>(domainDebtor);
+            ViewBag.Title = string.Format("Edit {0}", editModelDebtor.Name);
+            return View("CreateOrEdit", editModelDebtor);
         }
 
-        //
         // POST: /Debtors/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(DebtorEditModel editModelDebtor)
         {
-            try {
-                // TODO: Add update logic here
-
+            if (ModelState.IsValid) {
+                var domainDebtor = new Debtor(editModelDebtor.Id);
+                Mapper.Map(editModelDebtor, domainDebtor);
+                _debtorRepository.MakePersistent(domainDebtor);
                 return RedirectToAction("Index");
             }
-            catch {
-                return View();
-            }
+
+            return View("CreateOrEdit", editModelDebtor);
         }
 
-        //
         // GET: /Debtors/Delete/5
-        public ActionResult Delete(int id)
+        [HttpGet]
+        [ActionName("Delete")]
+        public ActionResult DeleteGet(int id)
         {
-            Debtor debtor = _debtorRepository.FindById(id);
+            var domainDebtor = _debtorRepository.FindById(id);
 
-            if (debtor == null) {
+            if (domainDebtor == null) {
                 throw new InvalidOperationException(string.Format("Temporary exception - no debtor found with id \"{0}\".", id));
             }
 
-            DebtorModel model = Mapper.Map<Debtor, DebtorModel>(debtor);
+            var modelDebtor = Mapper.Map<Debtor, DebtorViewModel>(domainDebtor);
 
-            return View(model);
+            return View(modelDebtor);
         }
 
-        //
         // POST: /Debtors/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [ActionName("Delete")]
+        public ActionResult DeletePost(int id)
         {
             try {
-                Debtor debtor = _debtorRepository.FindById(id);
+                var domainDebtor = _debtorRepository.FindById(id);
 
-                if (debtor == null) {
+                if (domainDebtor == null) {
                     throw new InvalidOperationException(string.Format("Temporary exception - no debtor found with id \"{0}\".", id));
                 }
 
-                _debtorRepository.MakeTransient(debtor);
+                _debtorRepository.MakeTransient(domainDebtor);
 
                 return RedirectToAction("Index");
             }
             catch {
+                // Is this the right thing to do ?
+                // How do we convey the error ?
                 return View();
             }
-        }
-
-        public ActionResult AddCreditorEditorRow()
-        {
-            return PartialView("CreditorEditorRow", new Creditor());
         }
     }
 }

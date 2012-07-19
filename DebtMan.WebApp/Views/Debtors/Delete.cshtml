@@ -1,4 +1,4 @@
-﻿@model DebtMan.WebApp.Models.DebtorModel
+﻿@model DebtMan.WebApp.Models.DebtorViewModel
 
 @{
     ViewBag.Title = "Delete debtor";
@@ -11,28 +11,43 @@
     <fieldset>
         <legend>Debtor</legend>
 
-        <div class="display-label">Name</div>
-        <div class="display-field">
-            @Html.DisplayFor(model => model.Name)
+        <div class="display-label">
+            @Html.LabelFor(m => m.Name)
         </div>
+        <div class="display-field">
+            @Html.DisplayFor(m => m.Name)
+        </div>
+        <br />
 
-        <div class="display-label">Income</div>
-        <div class="display-field">
-            @Html.DisplayFor(model => model.Income)
+        <div class="display-label">
+            @Html.LabelFor(m => m.Income)
         </div>
+        <div class="display-field">
+            @Html.DisplayFor(m => m.Income)
+        </div>
+        <br />
 
-        <div class="display-label">Expenditure</div>
-        <div class="display-field">
-            @Html.DisplayFor(model => model.Expenditure)
+        <div class="display-label">
+            @Html.LabelFor(m => m.Expenditure)
         </div>
+        <div class="display-field">
+            @Html.DisplayFor(m => m.Expenditure)
+        </div>
+        <br />
 
-        <div class="display-label">Company Name</div>
-        <div class="display-field">
-            @Html.DisplayFor(model => model.CompanyName)
+        <div class="display-label">
+            @Html.LabelFor(m => m.CompanyName)
         </div>
+        <div class="display-field">
+            @Html.DisplayFor(m => m.CompanyName)
+        </div>
+        <br />
 
         <p>
             <input type="submit" value="Delete" />
+            <a href="@Url.Action("Index")">
+                <button>Cancel</button>
+            </a>
         </p>
 
     </fieldset>

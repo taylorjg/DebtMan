@@ -7,7 +7,7 @@ namespace DebtMan.TestRepositories
     {
         public TestRepositoriesRegistry()
         {
-            IDebtorRepository debtorRepository = TestData.CreateDebtorRepository();
+            var debtorRepository = TestData.CreateDebtorRepository();
             For<IDebtorRepository>().Use(debtorRepository);
         }
     }

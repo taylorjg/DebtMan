@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DebtMan.DomainModel.Repositories
+﻿namespace DebtMan.DomainModel.Repositories
 {
     public interface IDebtorRepository : IGenericRepository<Debtor, int>
     {

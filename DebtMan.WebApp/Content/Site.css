@@ -211,6 +211,11 @@ input[type="submit"] {
     padding: 5px;
 }
 
+button {
+    font-size: 1.2em;
+    padding: 5px;
+}
+
 /* TABLE
 ----------------------------------------------------------*/
 
@@ -301,14 +306,16 @@ div#title {
 
 /* Styles for editor and display helpers
 ----------------------------------------------------------*/
-.display-label, 
-.editor-label {
+
+.display-label, .editor-label {
     margin: 1em 0 0 0;
+	display: inline-block;
+	width: 220px;
 }
 
-.display-field, 
-.editor-field {
+.display-field, .editor-field {
     margin: 0.5em 0 0 0;
+	display: inline-block;
 }
 
 .text-box {
@@ -321,8 +328,4 @@ div#title {
 
 .tri-state {
     width: 6em;
-}
-
-.money-column {
-	text-align: center;
 }

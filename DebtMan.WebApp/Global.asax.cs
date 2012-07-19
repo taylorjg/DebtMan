@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Routing;
+using DebtMan.WebApp.Bootstrappers;
+using DebtMan.WebApp.MvcExtensibility;
 
 namespace DebtMan.WebApp
 {
@@ -19,6 +17,9 @@ namespace DebtMan.WebApp
 
         public static void RegisterRoutes(RouteCollection routes)
         {
+            // http://stackoverflow.com/questions/487230/serving-favicon-ico-in-asp-net-mvc
+            routes.IgnoreRoute("favicon.ico");
+
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
@@ -38,7 +39,7 @@ namespace DebtMan.WebApp
             StructureMapBootstrapper.Initialise();
             ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
 
-            AutoMapperConfiguration.Configure();
+            AutoMapperBootstrapper.Configure();
         }
     }
 }

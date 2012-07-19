@@ -20,14 +20,14 @@ namespace DebtMan.WebApp.Controllers
 
         public ActionResult Details(int id, Company? company)
         {
-            Debtor debtor = _debtorRepository.FindById(id);
+            var debtor = _debtorRepository.FindById(id);
 
             if (debtor == null) {
                 throw new InvalidOperationException(string.Format("Temporary exception - no debtor found with id \"{0}\".", id));
             }
 
-            DebtManagementPlan dmp = (company.HasValue) ? new DebtManagementPlan(debtor, company.Value) : new DebtManagementPlan(debtor);
-            DebtManagementPlanModel model = Mapper.Map<DebtManagementPlan, DebtManagementPlanModel>(dmp);
+            var dmp = (company.HasValue) ? new DebtManagementPlan(debtor, company.Value) : new DebtManagementPlan(debtor);
+            var model = Mapper.Map<DebtManagementPlan, DebtManagementPlanViewModel>(dmp);
 
             return View(model);
         }

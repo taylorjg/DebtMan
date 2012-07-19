@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace DebtMan.DomainModel.Repositories
+﻿namespace DebtMan.DomainModel.Repositories
 {
-    public interface IGenericRepository<T, ID>
+    public interface IGenericRepository<TEntity, in TId> where TEntity : class
     {
-        T FindById(ID id);
-        T FindByIdAndLock(ID id);
-        T[] FindAll();
-        T MakePersistent(T entity);
-        void MakeTransient(T entity);
+        TEntity FindById(TId id);
+        TEntity FindByIdAndLock(TId id);
+        TEntity[] FindAll();
+        TEntity MakePersistent(TEntity entity);
+        void MakeTransient(TEntity entity);
     }
 }

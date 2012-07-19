@@ -1,4 +1,4 @@
-﻿@model DebtMan.WebApp.Models.DebtorModel
+﻿@model DebtMan.WebApp.Models.DebtorViewModel
 
 @{
     ViewBag.Title = "Debtor details";
@@ -7,54 +7,73 @@
 <fieldset>
     <legend>Debtor</legend>
 
-    <div class="display-label">Name</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Name)
+    <div class="display-label">
+        @Html.LabelFor(m => m.Name)
     </div>
-
-    <div class="display-label">Income</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Income)
+        @Html.DisplayFor(m => m.Name)
     </div>
+    <br />
 
-    <div class="display-label">Expenditure</div>
+    <div class="display-label">
+        @Html.LabelFor(m => m.Income)
+    </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Expenditure)
+        @Html.DisplayFor(m => m.Income)
     </div>
+    <br />
 
-    <div class="display-label">Disposable Income</div>
+    <div class="display-label">
+        @Html.LabelFor(m => m.Expenditure)
+    </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.DisposableIncome)
+        @Html.DisplayFor(m => m.Expenditure)
     </div>
+    <br />
 
-    <div class="display-label">Total Amount Owed</div>
+    <div class="display-label">
+        @Html.LabelFor(m => m.DisposableIncome)
+    </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.TotalAmountOwed)
+        @Html.DisplayFor(m => m.DisposableIncome)
     </div>
+    <br />
 
-    <div class="display-label">Company Name</div>
+    <div class="display-label">
+        @Html.LabelFor(m => m.TotalAmountOwed)
+    </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.CompanyName)
+        @Html.DisplayFor(m => m.TotalAmountOwed)
     </div>
+    <br />
 
-    <div class="display-label">Debts</div>
+    <div class="display-label">
+        @Html.LabelFor(m => m.CompanyName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(m => m.CompanyName)
+    </div>
+    <br />
+
+    <h3>Debts</h3>
+
     <div class="display-field">
         <table>
             <tr>
                 <th>Amount Owed</th>
             </tr>
 
-        @foreach (var item in Model.Creditors) {
-            <tr>
-                <td class="money-column">
-                    @Html.DisplayFor(modelItem => item.AmountOwed)
-                </td>
-            </tr>
-        }
+            @foreach (var debt in Model.Debts) {
+                <tr>
+                    <td class="money-column">
+                        @Html.DisplayFor(_ => debt.AmountOwed)
+                    </td>
+                </tr>
+            }
 
         </table>
     </div>
-
+    
 </fieldset>
 
 <div>

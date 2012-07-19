@@ -1,4 +1,6 @@
-﻿@model IEnumerable<DebtMan.WebApp.Models.DebtorModel>
+﻿@using DebtMan.DomainModel
+@using DebtMan.WebApp.MvcExtensibility
+@model IEnumerable<DebtMan.WebApp.Models.DebtorViewModel>
 
 @{
     ViewBag.Title = "List of debtors";
@@ -15,52 +17,56 @@
         <th>Expenditure</th>
         <th>Disposable Income</th>
         <th>Total Amount Owed</th>
-        <th>McDermott and Godfrey</th>
-        <th>DebtDestructor</th>
-        <th>MoneyHelper</th>
+        <th>@Company.CompanyA.CompanyToDisplayName()</th>
+        <th>@Company.CompanyB.CompanyToDisplayName()</th>
+        <th>@Company.CompanyC.CompanyToDisplayName()</th>
+        <th></th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.ActionLink(item.Name, "Details", new { id = item.Id })
         </td>
         <td class="money-column">
-            @Html.DisplayFor(modelItem => item.Income)
+            @Html.DisplayFor(_ => item.Income)
         </td>
         <td class="money-column">
-            @Html.DisplayFor(modelItem => item.Expenditure)
+            @Html.DisplayFor(_ => item.Expenditure)
         </td>
         <td class="money-column">
-            @Html.DisplayFor(modelItem => item.DisposableIncome)
+            @Html.DisplayFor(_ => item.DisposableIncome)
         </td>
         <td class="money-column">
-            @Html.DisplayFor(modelItem => item.TotalAmountOwed)
+            @Html.DisplayFor(_ => item.TotalAmountOwed)
         </td>
-        <td class="money-column">
+        <td @Html.Css("money-column").Add("is-with-this-company", item.IsWithCompanyA)>
             @Html.ActionLink(
-                linkText: item.MonthlyManagementFeeCompanyA,
+                linkText: item.MonthlyManagementFeeCompanyA.ToString("C"),
                 actionName: "Details",
                 controllerName: "DebtManagementPlan",
-                routeValues: new { id = item.Id, company = DebtMan.DomainModel.Company.CompanyA },
+                routeValues: new { id = item.Id, company = Company.CompanyA },
                 htmlAttributes: null)
         </td>
-        <td class="money-column">
+        <td @Html.Css("money-column").Add("is-with-this-company", item.IsWithCompanyB)>
             @Html.ActionLink(
-                linkText: item.MonthlyManagementFeeCompanyB,
+             linkText: item.MonthlyManagementFeeCompanyB.ToString("C"),
                 actionName: "Details",
                 controllerName: "DebtManagementPlan",
-                routeValues: new { id = item.Id, company = DebtMan.DomainModel.Company.CompanyB },
+                routeValues: new { id = item.Id, company = Company.CompanyB },
                 htmlAttributes: null)
         </td>
-        <td class="money-column">
+        <td @Html.Css("money-column").Add("is-with-this-company", item.IsWithCompanyC)>
             @Html.ActionLink(
-                linkText: item.MonthlyManagementFeeCompanyC,
+             linkText: item.MonthlyManagementFeeCompanyC.ToString("C"),
                 actionName: "Details",
                 controllerName: "DebtManagementPlan",
-                routeValues: new { id = item.Id, company = DebtMan.DomainModel.Company.CompanyC },
+                routeValues: new { id = item.Id, company = Company.CompanyC },
                 htmlAttributes: null)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
         </td>
         <td>
             @Html.ActionLink("Delete", "Delete", new { id = item.Id })

@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,16 +46,27 @@
     <Compile Include="CommissionCalculatorCompanyB.cs" />
     <Compile Include="CommissionCalculatorCompanyC.cs" />
     <Compile Include="Company.cs" />
-    <Compile Include="Creditor.cs" />
+    <Compile Include="CompanyExtensions.cs" />
+    <Compile Include="Debt.cs" />
     <Compile Include="CreditorRepayment.cs" />
     <Compile Include="DebtManagementPlan.cs" />
+    <Compile Include="DebtManResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DebtManResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Debtor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CommissionCalculatorFactory.cs" />
     <Compile Include="Repositories\IDebtorRepository.cs" />
     <Compile Include="Repositories\IGenericRepository.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="DebtManResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DebtManResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

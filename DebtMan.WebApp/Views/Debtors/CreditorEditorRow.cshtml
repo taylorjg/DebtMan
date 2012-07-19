@@ -1,9 +1,0 @@
-﻿@model DebtMan.DomainModel.Creditor
-@using DebtMan.WebApp.Helpers
-
-<div class="creditorEditorRow">
-    @using (Html.BeginCollectionItem("Creditors")) {
-        @:Amount Owed:&nbsp;@Html.EditorFor(model => model.AmountOwed)
-        <a href="#" class="deleteCreditorEditorRow">Delete</a>
-    }
-</div>
