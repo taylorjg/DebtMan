@@ -6,7 +6,7 @@ namespace DebtMan.DomainModel
     {
         public static CommissionCalculatorBase GetCommissionCalculator(Company company)
         {
-            CommissionCalculatorBase commissionCalculatorBase = null;
+            CommissionCalculatorBase commissionCalculatorBase;
 
             switch (company) {
 

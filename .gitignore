@@ -1,4 +1,8 @@
 *.suo
 *.csproj.user
+*.user
+notes.txt
 obj
 bin
+packages
+_ReSharper.DebtMan

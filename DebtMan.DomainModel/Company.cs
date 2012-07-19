@@ -1,25 +1,16 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DebtMan.DomainModel
 {
-    /// <summary>
-    /// Represents the companies that have been acquired.
-    /// </summary>
     public enum Company {
 
-        /// <summary>
-        /// McDermott and Godfrey
-        /// </summary>
+        [Display(ResourceType = typeof(DebtManResources), Name = "CompanyADisplayName")]
         CompanyA,
 
-        /// <summary>
-        /// DebtDestructor
-        /// </summary>
+        [Display(ResourceType = typeof(DebtManResources), Name = "CompanyBDisplayName")]
         CompanyB,
 
-        /// <summary>
-        /// MoneyHelper
-        /// </summary>
+        [Display(ResourceType = typeof(DebtManResources), Name = "CompanyCDisplayName")]
         CompanyC,
     };
 }

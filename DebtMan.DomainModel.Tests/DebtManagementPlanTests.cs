@@ -1,26 +1,30 @@
-﻿using System;
-using DebtMan.DomainModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace DebtMan.DomainModel.Tests
 {
+    // ReSharper disable InconsistentNaming
+
     [TestFixture]
     internal class DebtManagementPlanTests
     {
         [Test]
         public void DebtManagementPlan_Debtor1CompanyA_IsCalculatedCorrectly()
         {
-            var debtor = new Debtor();
-            debtor.Name = "John Nogan";
-            debtor.Income = 980m;
-            debtor.Expenditure = 670m;
-            debtor.Company = Company.CompanyA;
-            debtor.Creditors = new Creditor[] {
-                new Creditor() { AmountOwed = 3000m },
-                new Creditor() { AmountOwed = 12000m },
-                new Creditor() { AmountOwed = 100m },
-                new Creditor() { AmountOwed = 4000m }
-            };
+            var debtor =
+                new Debtor
+                    {
+                        Name = "John Nogan",
+                        Income = 980m,
+                        Expenditure = 670m,
+                        Company = Company.CompanyA,
+                        Debts = new[]
+                                        {
+                                            new Debt {AmountOwed = 3000m},
+                                            new Debt {AmountOwed = 12000m},
+                                            new Debt {AmountOwed = 100m},
+                                            new Debt {AmountOwed = 4000m}
+                                        }
+                    };
 
             var dmp = new DebtManagementPlan(debtor);
 
@@ -31,18 +35,22 @@ namespace DebtMan.DomainModel.Tests
         [Test]
         public void DebtManagementPlan_Debtor2CompanyC_IsCalculatedCorrectly()
         {
-            var debtor = new Debtor();
-            debtor.Name = "Paul A’rdé";
-            debtor.Income = 1560m;
-            debtor.Expenditure = 1399m;
-            debtor.Company = Company.CompanyC;
-            debtor.Creditors = new Creditor[] {
-                new Creditor() { AmountOwed = 300m },
-                new Creditor() { AmountOwed = 2400m },
-                new Creditor() { AmountOwed = 10000m },
-                new Creditor() { AmountOwed = 2000m },
-                new Creditor() { AmountOwed = 919m }
-            };
+            var debtor =
+                new Debtor
+                    {
+                        Name = "Paul A’rdé",
+                        Income = 1560m,
+                        Expenditure = 1399m,
+                        Company = Company.CompanyC,
+                        Debts = new[]
+                                        {
+                                            new Debt {AmountOwed = 300m},
+                                            new Debt {AmountOwed = 2400m},
+                                            new Debt {AmountOwed = 10000m},
+                                            new Debt {AmountOwed = 2000m},
+                                            new Debt {AmountOwed = 919m}
+                                        }
+                    };
 
             var dmp = new DebtManagementPlan(debtor);
 
@@ -53,16 +61,20 @@ namespace DebtMan.DomainModel.Tests
         [Test]
         public void DebtManagementPlan_Debtor3CompanyB_IsCalculatedCorrectly()
         {
-            var debtor = new Debtor();
-            debtor.Name = "Miss T. Un-terre";
-            debtor.Income = 500m;
-            debtor.Expenditure = 400m;
-            debtor.Company = Company.CompanyB;
-            debtor.Creditors = new Creditor[] {
-                new Creditor() { AmountOwed = 100m },
-                new Creditor() { AmountOwed = 2400m },
-                new Creditor() { AmountOwed = 5000m }
-            };
+            var debtor =
+                new Debtor
+                    {
+                        Name = "Miss T. Un-terre",
+                        Income = 500m,
+                        Expenditure = 400m,
+                        Company = Company.CompanyB,
+                        Debts = new[]
+                                        {
+                                            new Debt {AmountOwed = 100m},
+                                            new Debt {AmountOwed = 2400m},
+                                            new Debt {AmountOwed = 5000m}
+                                        }
+                    };
 
             var dmp = new DebtManagementPlan(debtor);
 
@@ -73,23 +85,49 @@ namespace DebtMan.DomainModel.Tests
         [Test]
         public void DebtManagementPlan_Debtor4CompanyC_IsCalculatedCorrectly()
         {
-            var debtor = new Debtor();
-            debtor.Name = "David Simmer";
-            debtor.Income = 2000m;
-            debtor.Expenditure = 1000m;
-            debtor.Company = Company.CompanyC;
-            debtor.Creditors = new Creditor[] {
-                new Creditor() { AmountOwed = 100m },
-                new Creditor() { AmountOwed = 200m },
-                new Creditor() { AmountOwed = 600m },
-                new Creditor() { AmountOwed = 2000m },
-                new Creditor() { AmountOwed = 7370m }
-            };
+            var debtor =
+                new Debtor
+                    {
+                        Name = "David Simmer",
+                        Income = 2000m,
+                        Expenditure = 1000m,
+                        Company = Company.CompanyC,
+                        Debts = new[]
+                                        {
+                                            new Debt {AmountOwed = 100m},
+                                            new Debt {AmountOwed = 200m},
+                                            new Debt {AmountOwed = 600m},
+                                            new Debt {AmountOwed = 2000m},
+                                            new Debt {AmountOwed = 7370m}
+                                        }
+                    };
 
             var dmp = new DebtManagementPlan(debtor);
 
             Assert.That(dmp.MonthlyManagementFee, Is.EqualTo(100.0m));
             Assert.That(dmp.CreditorRepayments, Has.Count.EqualTo(5));
         }
+
+        [Test]
+        public void DebtManagementPlan_GivenADebtorWithATotalAmountOwedOfZero_DoesNotThrowAnException()
+        {
+            var debtor =
+                new Debtor
+                    {
+                        Name = "Rick Rolling",
+                        Income = 2000m,
+                        Expenditure = 1200m,
+                        Company = Company.CompanyA,
+                        Debts =
+                            new[]
+                                {
+                                    new Debt {AmountOwed = 0m}
+                                }
+                    };
+
+            var dmp = new DebtManagementPlan(debtor);
+        }
     }
+
+    // ReSharper restore InconsistentNaming
 }

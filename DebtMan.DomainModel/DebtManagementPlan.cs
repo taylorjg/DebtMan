@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DebtMan.DomainModel
 {
     public class DebtManagementPlan
     {
-        private readonly CommissionCalculatorBase _commissionCalculator = null;
-        private readonly List<CreditorRepayment> _creditorRepayments = new List<CreditorRepayment>();
+        private readonly CommissionCalculatorBase _commissionCalculator;
+        private readonly IList<CreditorRepayment> _creditorRepayments = new List<CreditorRepayment>();
 
         public DebtManagementPlan(Debtor debtor) : this(debtor, debtor.Company)
         {
@@ -31,16 +30,18 @@ namespace DebtMan.DomainModel
 
         protected void CalculateProRataRepaymentsToCreditors()
         {
-            decimal remainingDisposableIncome = Debtor.DisposableIncome - MonthlyManagementFee;
-            decimal totalAmountOwed = Debtor.TotalAmountOwed;
+            var remainingDisposableIncome = Debtor.DisposableIncome - MonthlyManagementFee;
+            var totalAmountOwed = Debtor.TotalAmountOwed;
 
-            foreach (var creditor in Debtor.Creditors) {
-                decimal monthlyRepayment = creditor.AmountOwed * remainingDisposableIncome / totalAmountOwed;
+            if (totalAmountOwed <= 0) return;
+
+            foreach (var debt in Debtor.Debts) {
+                var monthlyRepayment = debt.AmountOwed * remainingDisposableIncome / totalAmountOwed;
                 // The monthly repayment should not exceed the amount owed!
-                if (monthlyRepayment > creditor.AmountOwed) {
-                    monthlyRepayment = creditor.AmountOwed;
+                if (monthlyRepayment > debt.AmountOwed) {
+                    monthlyRepayment = debt.AmountOwed;
                 }
-                _creditorRepayments.Add(new CreditorRepayment(creditor, monthlyRepayment));
+                _creditorRepayments.Add(new CreditorRepayment(debt, monthlyRepayment));
             }
         }
     }

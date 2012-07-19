@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DebtMan.DomainModel
+﻿namespace DebtMan.DomainModel
 {
     /// <summary>
     /// An application of the Strategy design pattern.

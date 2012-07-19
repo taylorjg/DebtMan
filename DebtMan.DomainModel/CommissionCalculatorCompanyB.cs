@@ -1,38 +1,36 @@
-﻿using System;
-
-namespace DebtMan.DomainModel
+﻿namespace DebtMan.DomainModel
 {
     public class CommissionCalculatorCompanyB : CommissionCalculatorBase
     {
-        private const decimal MINIMUM_FEE = 25.0m;
-        private const decimal MAXIMUM_FEE = 300.0m;
-        private const decimal FIRST_THRESHOLD = 100.0m;
-        private const decimal SECOND_THRESHOLD = 200.0m;
-        private const decimal UNDER_SECOND_THRESHOLD_FEE = 30.0m;
-        private const decimal OVER_SECOND_THRESHOLD_PERCENT = 16.0m;
+        private const decimal MinimumFee = 25.0m;
+        private const decimal MaximumFee = 300.0m;
+        private const decimal FirstThreshold = 100.0m;
+        private const decimal SecondThreshold = 200.0m;
+        private const decimal UnderSecondThresholdFee = 30.0m;
+        private const decimal OverSecondThresholdPercent = 16.0m;
 
         public override decimal CalculateManagementFee(Debtor debtor)
         {
-            decimal monthlyManagementFee = 0.0m;
+            decimal monthlyManagementFee;
 
-            if (debtor.DisposableIncome < FIRST_THRESHOLD) {
-                monthlyManagementFee = MINIMUM_FEE;
+            if (debtor.DisposableIncome < FirstThreshold) {
+                monthlyManagementFee = MinimumFee;
             }
             else {
-                if (debtor.DisposableIncome < SECOND_THRESHOLD) {
-                    monthlyManagementFee = UNDER_SECOND_THRESHOLD_FEE;
+                if (debtor.DisposableIncome < SecondThreshold) {
+                    monthlyManagementFee = UnderSecondThresholdFee;
                 }
                 else {
-                    monthlyManagementFee = debtor.DisposableIncome * OVER_SECOND_THRESHOLD_PERCENT / 100;
+                    monthlyManagementFee = debtor.DisposableIncome * OverSecondThresholdPercent / 100;
                 }
             }
 
-            if (monthlyManagementFee < MINIMUM_FEE) {
-                monthlyManagementFee = MINIMUM_FEE;
+            if (monthlyManagementFee < MinimumFee) {
+                monthlyManagementFee = MinimumFee;
             }
 
-            if (monthlyManagementFee > MAXIMUM_FEE) {
-                monthlyManagementFee = MAXIMUM_FEE;
+            if (monthlyManagementFee > MaximumFee) {
+                monthlyManagementFee = MaximumFee;
             }
 
             return monthlyManagementFee;
